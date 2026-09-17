@@ -8,16 +8,41 @@ public class Main {
         BankManager manager = new BankManager();
 
         while (true) {
-            System.out.println("\n(1) Deposit \n(2) Withdrew \n(3) Transfer \n(4) Check Balance \n(5) Exit → \n");
+
+            // account creation
+
+            System.out.println("-------Create Your Account----------");
+            System.out.println("Enter your name:");
+            String userName = scan.nextLine();
+            account.setName(userName);
+            manager.accountCreation(account);
+            System.out.println();
+
+            System.out.println("-------Which operation Want to perform--------");
+            System.out.println("(1) Deposit \n(2) Withdrew \n(3) Transfer \n(4) Check Balance \n(5) Exit → \n");
             System.out.println("Enter your choice: ");
             int userInput = scan.nextInt();
+            scan.nextLine();
 
             switch (userInput) {
 
                 case 1:
-                    System.out.println("Enter Deposit Amount: ");
-                    double deposit = scan.nextDouble();
-                    manager.deposit(account, deposit);
+                    String userInputAcNumber;
+                    while (true) {
+                        System.out.println("Enter your Account Number Want to Deposit:");
+                        userInputAcNumber = scan.nextLine();
+
+                        if (manager.isAccountFound(userInputAcNumber)) {
+                            System.out.println("Enter Deposit Amount: ");
+                            double deposit = scan.nextDouble();
+                            manager.deposit(account, deposit);
+                            break;
+
+                        } else {
+                            System.out.println("User Account Not found! try Again");
+                        }
+
+                    }
                     break;
 
                 case 2:
