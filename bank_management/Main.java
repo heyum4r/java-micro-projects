@@ -1,75 +1,92 @@
 import java.util.Scanner;
 
 public class Main {
-
-    public static void main(String[] arg) {
+    public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        BankAccount account = new BankAccount();
         BankManager manager = new BankManager();
 
         while (true) {
+            System.out.println("\n========== MAIN MENU ==========");
+            System.out.println("(1) Create Account");
+            System.out.println("(2) Perform Transaction");
+            System.out.println("(3) Exit");
+            System.out.print("Enter choice: ");
 
-            // account creation
+            int choice = scan.nextInt();
+            scan.nextLine(); // Clear buffer
 
-            System.out.println("-------Create Your Account----------");
-            System.out.println("Enter your name:");
-            String userName = scan.nextLine();
-            account.setName(userName);
-            manager.accountCreation(account);
-            System.out.println();
-
-            System.out.println("-------Which operation Want to perform--------");
-            System.out.println("(1) Deposit \n(2) Withdrew \n(3) Transfer \n(4) Check Balance \n(5) Exit → \n");
-            System.out.println("Enter your choice: ");
-            int userInput = scan.nextInt();
-            scan.nextLine();
-
-            switch (userInput) {
-
+            switch (choice) {
                 case 1:
-                    String userInputAcNumber;
-                    while (true) {
-                        System.out.println("Enter your Account Number Want to Deposit:");
-                        userInputAcNumber = scan.nextLine();
-
-                        if (manager.isAccountFound(userInputAcNumber)) {
-                            System.out.println("Enter Deposit Amount: ");
-                            double deposit = scan.nextDouble();
-                            manager.deposit(account, deposit);
-                            break;
-
-                        } else {
-                            System.out.println("User Account Not found! try Again");
-                        }
-
-                    }
+                    System.out.println("\n--- Account Creation ---");
+                    System.out.print("Enter your name: ");
+                    String name = scan.nextLine();
+                    manager.accountCreation(name);
                     break;
 
                 case 2:
-                    System.out.println("Enter Withdraw Amount: ");
-                    double withdraw = scan.nextDouble();
-                    manager.withdraw(account, withdraw);
+                    System.out.println("\n--- Operations ---");
+                    System.out.println("(1) Deposit");
+                    System.out.println("(2) Withdraw");
+                    System.out.println("(3) Transfer");
+                    System.out.println("(4) Check Balance");
+                    System.out.print("Enter operation choice: ");
+
+                    int op = scan.nextInt();
+                    scan.nextLine(); // Clear buffer
+
+                    System.out.print("Enter your Account Number: ");
+                    String accNum = scan.nextLine();
+                    BankAccount currentAcc = manager.findAccount(accNum);
+
+                    if (currentAcc == null) {
+                        System.out.println("Error: Account not found!");
+                        break;
+                    }
+
+                    switch (op) {
+                        case 1:
+                            System.out.print("Enter Deposit Amount: ");
+                            double depAmount = scan.nextDouble();
+                            manager.deposit(currentAcc, depAmount);
+                            break;
+
+                        case 2:
+                            System.out.print("Enter Withdraw Amount: ");
+                            double wAmount = scan.nextDouble();
+                            manager.withdraw(currentAcc, wAmount);
+                            break;
+
+                        case 3:
+                            System.out.print("Enter Destination Account Number: ");
+                            String destAccNum = scan.nextLine();
+                            BankAccount destAcc = manager.findAccount(destAccNum);
+
+                            if (destAcc == null) {
+                                System.out.println("Error: Destination account not found!");
+                            } else {
+                                System.out.print("Enter Transfer Amount: ");
+                                double tAmount = scan.nextDouble();
+                                manager.transfer(currentAcc, destAcc, tAmount);
+                            }
+                            break;
+
+                        case 4:
+                            manager.checkBalance(currentAcc);
+                            break;
+
+                        default:
+                            System.out.println("Invalid operation choice.");
+                    }
                     break;
 
                 case 3:
-                    System.out.println("Enter Transfer Amount: ");
-                    double transfer = scan.nextDouble();
-                    manager.transfer(account, transfer);
-                    break;
-
-                case 4:
-                    manager.checkBalance(account);
-                    break;
-                case 5:
-                    System.out.println("Program Closed...");
+                    System.out.println("Exiting System. Goodbye!");
+                    scan.close();
                     return;
 
                 default:
-                    System.out.println("Enter a valid Number.");
-                    break;
-
+                    System.out.println("Invalid main menu choice.");
             }
         }
-
     }
 }

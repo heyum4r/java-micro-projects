@@ -1,79 +1,71 @@
-import java.util.Random;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BankManager {
-
     private Random random = new Random();
     private ArrayList<BankAccount> accountDetailsArr = new ArrayList<>();
 
-    // Random Number
-    int assignAccountNum = random.nextInt(900000) + 100000;
-    String randomString = String.valueOf(assignAccountNum);
+    // Create a new account and store it
+    public void accountCreation(String userName) {
+        int assignAccountNum = random.nextInt(900000) + 100000;
+        String accountNumber = String.valueOf(assignAccountNum);
 
-    // Account creation
-    public void accountCreation(BankAccount account) {
-        accountDetailsArr.add(account);
-        account.setAccountNumber(randomString);
+        // Create a NEW instance for each account
+        BankAccount newAccount = new BankAccount(userName, accountNumber, 0.0);
+        accountDetailsArr.add(newAccount);
 
-        System.out.println("Your Account Details are below: \n" + accountDetailsArr);
-
+        System.out.println("Account created successfully!");
+        System.out.println(newAccount);
     }
 
-    public boolean isAccountFound(String userInputAcNumber) {
-        for (BankAccount user : accountDetailsArr) {
-            if (user.getAccountNumber().equals(userInputAcNumber)) {
-                return true;
+    // Crucial Helper: Finds and returns the matching account object
+    public BankAccount findAccount(String accountNumber) {
+        for (BankAccount acc : accountDetailsArr) {
+            if (acc.getAccountNumber().equals(accountNumber)) {
+                return acc; // Found match
             }
         }
-        return false;
-
+        return null; // Not found
     }
 
-    // Deposit money
-
-    public void deposit(BankAccount balance, double amount) {
+    // Deposit
+    public void deposit(BankAccount account, double amount) {
         if (amount > 0) {
-            double newBalance = balance.getBalance() + amount; // ?
-            balance.setBalance(newBalance);
-            System.out.println("Balance added " + amount + " succesfully");
-
+            account.setBalance(account.getBalance() + amount);
+            System.out.println("Successfully deposited $" + amount + ". New Balance: $" + account.getBalance());
         } else {
-            System.out.println("Can't be add balance less than 1");
-
+            System.out.println("Error: Deposit amount must be greater than 0.");
         }
-
     }
 
     // Withdraw
-    public void withdraw(BankAccount balance, double amount) {
-        if (balance.getBalance() >= amount && amount > 0) {
-            double leftBalance = balance.getBalance() - amount;
-            balance.setBalance(leftBalance);
-            System.out.println("Balance withdrew " + amount + " succesfully");
-
+    public void withdraw(BankAccount account, double amount) {
+        if (amount <= 0) {
+            System.out.println("Error: Withdrawal amount must be greater than 0.");
+        } else if (account.getBalance() >= amount) {
+            account.setBalance(account.getBalance() - amount);
+            System.out.println("Successfully withdrew $" + amount + ". Remaining Balance: $" + account.getBalance());
         } else {
-
-            System.out.println("Can't withdraw low Balance!");
+            System.out.println("Error: Insufficient funds!");
         }
     }
 
-    // Transfer
-    public void transfer(BankAccount balance, double amount) {
-        if (balance.getBalance() >= amount && amount > 0) {
-            double transferBalance = balance.getBalance() - amount;
-            balance.setBalance(transferBalance);
-            System.out.println("Balance Transfer " + amount + " succesfully");
-
+    // Transfer between sender and receiver
+    public void transfer(BankAccount sender, BankAccount receiver, double amount) {
+        if (amount <= 0) {
+            System.out.println("Error: Transfer amount must be greater than 0.");
+        } else if (sender.getBalance() >= amount) {
+            sender.setBalance(sender.getBalance() - amount);
+            receiver.setBalance(receiver.getBalance() + amount);
+            System.out.println("Successfully transferred $" + amount + " to " + receiver.getName());
         } else {
-            System.out.println("Can't Transfer low Balance!");
-
+            System.out.println("Error: Insufficient funds to transfer!");
         }
-
     }
 
-    // Check
-    public void checkBalance(BankAccount balance) {
-        System.out.println("Your avilable balance is: " + balance.getBalance());
-
+    // Check Balance
+    public void checkBalance(BankAccount account) {
+        System.out.println("Account Holder: " + account.getName());
+        System.out.println("Current Balance: $" + account.getBalance());
     }
 }

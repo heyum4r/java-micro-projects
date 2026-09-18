@@ -1,44 +1,32 @@
 public class BankAccount {
-    private double balance;
     private String name;
     private String accountNumber;
-    private double openingBalance;
+    private double balance;
 
-    // getter
-    public double getBalance() {
-        return balance;
+    public BankAccount(String name, String accountNumber, double initialBalance) {
+        this.name = name;
+        this.accountNumber = accountNumber;
+        this.balance = initialBalance;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAccountNumber() {
         return accountNumber;
     }
 
-    public double getopeningBalance() {
-        return openingBalance;
+    public double getBalance() {
+        return balance;
     }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
 
     public void setBalance(double balance) {
-         this.balance = balance;
+        this.balance = balance;
     }
 
     @Override
     public String toString() {
-        return "Name: '" + name +
-               "' Account: '" + accountNumber +
-               "' Blance: '" + openingBalance + "'";
+        return "Name: '" + name + "', Account No: '" + accountNumber + "', Balance: $" + balance;
     }
-
 }
